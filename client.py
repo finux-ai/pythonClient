@@ -85,9 +85,20 @@ def profile(business_ID, company, first_name, last_name, tokens):
 
 def fetch_data():
     path = "/api/user/profile"
-    response = requests.get(host+path)
-    # something
-    pass
+    response = requests.get(host + path)
+
+    # first we try the access token
+    headers = auth_header(tokens.access_token)
+    response = requests.get(host+path, headers=headers)
+
+    # if access token is expired, we send the request token to fetch another access token
+    if response.status_code == 401:
+        response = handle_expired_access_token(request=None, tokens=tokens, path=path)
+
+    # map to response model
+    result = api_response(response)
+    return result.status
+    
 
 def change_password(new_password, old_password, repeat_password):
     path = "/api/user/changepw"
