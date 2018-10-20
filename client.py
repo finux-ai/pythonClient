@@ -4,7 +4,7 @@ import requests
 
 from helpers import auth_header, api_response
 from models import RegisterRequest, AccessRefreshToken, LoginRequest, ProfileRequest, AccessToken, \
-    ChangePasswordRequest, FeedbackRequest
+    ChangePasswordRequest, FeedbackRequest, FetchData
 
 host = "https://app.dev.finux.ai"
 def get_selected_account():
@@ -89,7 +89,6 @@ def profile(business_ID, company, first_name, last_name, tokens):
 
 def fetch_data(tokens):
     path = "/api/user/profile"
-    response = requests.get(host + path)
 
     # first we try the access token
     headers = auth_header(tokens.access_token)
@@ -101,7 +100,7 @@ def fetch_data(tokens):
 
     # map to response model
     result = api_response(response)
-    return result.status
+    return FetchData(result.data)
 
 
 def change_password(new_password, repeat_password, old_password, tokens):
@@ -231,8 +230,9 @@ def branches():
 if __name__ == "__main__":
     # test register function
 
-    access_refresh_tokens = login("bba3@web.de", "Meinpasswort#14")
-    status = change_password("Meinpasswort#15", "Meinpasswort#15", "Meinpasswort#14", access_refresh_tokens)
-    print(status)
+    tokens = login("bba3@web.de", "Meinpasswort#14")
+    profile("Business123", "My Co", "Roger", "Smith", tokens)
+    print(data.firstname, data.surename, data.business_ID)
+
 
 

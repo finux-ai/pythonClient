@@ -71,6 +71,14 @@ class ProfileRequest:
         }
 
 
+class FetchData:
+    def __init__(self, data):
+        self.business_ID = data.get("businessID") 
+        self.company = data.get("company")
+        self.firstname = data.get("firstname")
+        self.surename = data.get("surename")
+        
+
 class ChangePasswordRequest:
     def __init__(self, old_password, new_password, repeat_password):
         self.old_password = old_password
