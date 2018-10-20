@@ -9,6 +9,7 @@ def health_check():
 
 
 def register(name, password, repeat_password):
+    # something
     pass
 
 
