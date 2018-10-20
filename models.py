@@ -105,8 +105,11 @@ class ApiResponse(object):
 
     @staticmethod
     def from_json(json):
+        message = None
+        if json.get("status") is not None:
+            message = json.get("status").get("message")
         return ApiResponse(
-            json.get("status").get("message"),
+            message,
             json.get("data"),
             json.get("code")
         )

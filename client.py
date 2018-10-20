@@ -102,7 +102,6 @@ def fetch_data(tokens):
     # map to response model
     result = api_response(response)
     return result.status
-    
 
 
 def change_password(new_password, repeat_password, old_password, tokens):
@@ -128,12 +127,13 @@ def change_password(new_password, repeat_password, old_password, tokens):
     return result.status
 
 
-def feedback(message, reply):
+def feedback(message, reply, tokens):
     path = "/api/user/feedback"
 
     # create request
     request = FeedbackRequest(
-
+        message=message,
+        reply=reply
     )
 
     # first we try the access token
@@ -231,8 +231,8 @@ def branches():
 if __name__ == "__main__":
     # test register function
 
-    tokens = login("bba3@web.de", "Meinpasswort#13")
-    status = change_password("Meinpasswort#15", "Meinpasswort#15", "Meinpasswort#14", tokens)
+    access_refresh_tokens = login("bba3@web.de", "Meinpasswort#14")
+    status = change_password("Meinpasswort#15", "Meinpasswort#15", "Meinpasswort#14", access_refresh_tokens)
     print(status)
 
 
