@@ -1,38 +1,50 @@
 import requests
 import json
 
-from models import RegisterRequest, RegisterLoginResponse, ApiResponse, RegisterData
+from models import RegisterRequest, ApiResponse, AccessRefreshToken, LoginRequest
 
 host = "https://app.dev.finux.ai/"
-health_check_path = "api/ping"
-register_path = "api/register"
+bearer_token = {"Authorization": "Bearer "}
 
 
 def health_check():
-    response = requests.get(host+health_check_path)
+    path = "api/ping"
+    response = requests.get(host+path)
     return response
 
 
 def register(name, password, repeat_password):
+    path = "api/register"
+
     # create request body
-    body = RegisterRequest(name, password, repeat_password)
+    request = RegisterRequest(name, password, repeat_password)
 
     # send register credentials
-    response = requests.post(host+register_path, data=body.to_json())
+    response = requests.post(host+path, data=request.to_json())
 
     # map to response model
-    data = json.loads(response.text)
-    api_response = ApiResponse.from_json(data)
+    json_data = json.loads(response.text)
+    api_response = ApiResponse.from_json(json_data)
 
     # create register data
-    return RegisterData(api_response.data)
+    return AccessRefreshToken(api_response.data)
 
 
-def login(email, password):
+def login(name, password):
     path = "/api/login"
-    response = requests.post(host+path)
-    # something
-    pass
+
+    # create request body
+    request = LoginRequest(name, password)
+
+    # send register credentials
+    response = requests.post(host + path, data=request.to_json())
+
+    # map to response model
+    json_data = json.loads(response.text)
+    api_response = ApiResponse.from_json(json_data)
+
+    # create register data
+    return AccessRefreshToken(api_response.data)
 
 def alpha_register(email, password, repeat_password, alpha_key):
     path = "/api/alpharegister"
@@ -108,5 +120,6 @@ def branches():
 
 
 if __name__ == "__main__":
-    register("bba1210@web.de", "Meinpasswort#12", "Meinpasswort#12")
+    register_data = register("bba1210@web.de", "Meinpasswort#12", "Meinpasswort#12")
+
 

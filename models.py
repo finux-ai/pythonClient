@@ -1,14 +1,3 @@
-class Status:
-    def __init__(self, message):
-        self.message = message
-
-
-class Data(object):
-    def __init__(self, access_token, refresh_token):
-        self.access_token = access_token
-        self.refresh_token = refresh_token
-
-
 class RegisterRequest(object):
     def __init__(self, email, password, repeat_password):
         self.email = email
@@ -66,7 +55,7 @@ class ApiResponse(object):
         )
 
 
-class RegisterData(object):
+class AccessRefreshToken(object):
     def __init__(self, data):
         self.access_token = data.get("accessToken")
         self.refresh_token = data.get("refreshToken")
