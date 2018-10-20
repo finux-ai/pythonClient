@@ -230,8 +230,9 @@ def branches():
 if __name__ == "__main__":
     # test register function
 
-    tokens = login("bba3@web.de", "Meinpasswort#14")
+    tokens = login("bba3@web.de", "Meinpasswort#15")
     profile("Business123", "My Co", "Roger", "Smith", tokens)
+    data = fetch_data(tokens)
     print(data.firstname, data.surename, data.business_ID)
 
 
