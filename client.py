@@ -10,6 +10,12 @@ def get_selected_account():
     path = "/api/user/connector/bank/account/{accountid}"
 
 
+def handle_expired_access_token(request, tokens, path):
+    access_token = access_for_refresh_token(tokens.refresh_token)
+    headers = auth_header(access_token)
+    return requests.put(host + path, headers=headers, data=request.to_json())
+
+
 def access_for_refresh_token(token):
     path = "api/refreshtoken"
     request = {
@@ -70,9 +76,7 @@ def profile(business_ID, company, first_name, last_name, tokens):
 
     # if access token is expired, we send the request token to fetch another access token
     if response.status_code == 401:
-        access_token = access_for_refresh_token(tokens.refresh_token)
-        headers = auth_header(access_token)
-        response = requests.put(host + path, headers=headers, data=request.to_json())
+        response = handle_expired_access_token(request=request, tokens=tokens, path=path)
 
     # map to response model
     result = api_response(response)
