@@ -1,4 +1,5 @@
 import requests
+import json
 
 from models import RegisterRequest, RegisterLoginResponse
 
@@ -17,11 +18,11 @@ def register(name, password, repeat_password):
     body = RegisterRequest(name, password, repeat_password)
 
     # send register credentials
-    json = requests.post(host+register_path)
-    json.get("status")
-    response = RegisterLoginResponse(json)
+    response = requests.post(host+register_path, data=body.to_json())
+    data = json.loads(response.text)
+    register_response = RegisterLoginResponse.from_json(data)
 
-    response.data.access_token
+    print(register_response)
     # something
     pass
 
@@ -105,6 +106,5 @@ def branches():
 
 
 if __name__ == "__main__":
-    json = requests.post(host + register_path)
+    register("bba1210@web.de", "Meinpasswort#12", "Meinpasswort#12")
 
-    print(json)
