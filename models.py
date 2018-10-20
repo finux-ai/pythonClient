@@ -99,3 +99,37 @@ class FeedbackRequest:
             "message": self.message,
             "reply": self.reply
         }
+
+class BankAccountRequest:
+    def __init__(self, bank_code, extra_secret, save_secret, secret, username):
+        self.bank_code = bank_code
+        self.extra_secret = extra_secret
+        self.save_secret = save_secret
+        self.secret = secret
+        self.username = username
+
+    def to_json(self):
+        return {
+            "bankCode": self.bank_code,
+            "extraSecret": self.extra_secret,
+            "saveSecret": self.save_secret,
+            "secret": self.secret,
+            "username": self.username
+        }
+
+class ChangeAccountRequest:
+    def __init__(self, data):
+        self.data = data
+
+    def to_json(self):
+        return {
+            "data": json.dumps(self.data)
+        }
+
+    # finish up -- dumps?
+
+class Account:
+    def __init__(self, accountID, flag):
+        self.accountID = accountID
+        self.flag = flag
+        # finish up
