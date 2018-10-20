@@ -1,15 +1,24 @@
 import requests
+
+from models import RegisterRequest
+
 host = "https://app.dev.finux.ai/"
+register_path = "api/ping"
 
 
 def health_check():
-    path = "api/ping"
-    response = requests.get(host+path)
+    response = requests.get(host+register_path)
     return response
 
 
 def register(name, password, repeat_password):
-    # something
+    # create request body
+    body = RegisterRequest(name, password, repeat_password)
+
+    # send register credentials
+    response = requests.post(host+register_path)
+
+
     pass
 
 
