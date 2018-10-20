@@ -6,6 +6,9 @@ from helpers import auth_header, api_response
 from models import RegisterRequest, AccessRefreshToken, LoginRequest, ProfileRequest, AccessToken
 
 host = "https://app.dev.finux.ai/"
+def get_selected_account():
+    path = "/api/user/connector/bank/account/{accountid}"
+
 
 def access_for_refresh_token(token):
     path = "api/refreshtoken"
@@ -106,21 +109,56 @@ def get_all_bank_accounts():
     # something
     pass
 
+def get_selected_account():
+    path = "/api/user/connector/bank/account/{accountid}"
+    response = requests.get(host + path)
+    pass
+
+def disconnect_selected_account():
+    path = "/api/user/connector/bank/account/{bankloginid}"
+    response = requests.delete(host + path)
+    pass
+
+def get_all_account_IDs():
+    path = "/api/user/connector/bank/ids"
+    response = requests.get(host + path)
+    pass
+
+def get_selected_account_IDs():
+    path = "/api/user/connector/bank/accountids"
+    response = requests.get(host + path)
+    pass
+
+def change_account_selection():
+    path = "/api/user/connector/bank/accountids"
+    response = requests.patch(host + path)
+    pass
+
+def add_GMI_account():
+    path = "/api/user/connector/gmi/account"
+    response = requests.post(host + path)
+    pass
+
+def get_all_invoices():
+    path = "/api/user/connector/gmi/invoices"
+    response = requests.get(host + path)
+    pass
+
 def get_forecast():
     path = "/api/user/intelligence/forecast"
     response = requests.get(host+path)
     # something
     pass
 
-def get_partners():
+def get_top_customers_supplier_percent():
     path = "/api/user/intelligence/procentpartner/{span}"
     response = requests.get(host+path)
     # something
     pass
 
-def get_top_customers_suppliers():
+def get_top_customers_suppliers_currency():
     path = "/api/user/intelligence/toppartner/{request_type}/{span}"
-    response = requests.get(host+path)
+    response = requests.get(host + path)
     # something
     pass
 
