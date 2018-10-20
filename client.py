@@ -119,6 +119,7 @@ def branches():
 
 
 if __name__ == "__main__":
+    # test register function
     register_data = register("bba1210@web.de", "Meinpasswort#12", "Meinpasswort#12")
 
 
