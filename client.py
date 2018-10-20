@@ -4,7 +4,6 @@ import json
 from models import RegisterRequest, ApiResponse, AccessRefreshToken, LoginRequest
 
 host = "https://app.dev.finux.ai/"
-bearer_token = {"Authorization": "Bearer "}
 
 
 def health_check():

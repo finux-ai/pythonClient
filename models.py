@@ -75,3 +75,27 @@ class ProfileRequest:
             "firstname": self.first_name,
             "surename": self.last_name
         }
+
+class ChangePasswordRequest:
+    def __init__(self, old_password, new_password, repeat_password):
+        self.old_password = old_password
+        self.new_password = new_password
+        self.repeat_password = repeat_password
+
+    def to_json(self):
+        return {
+            "oldPassword": self.old_password
+            "newPassword": self.new_password
+            "repeatPassword": self.repeat_password
+        }
+
+class FeedbackRequest:
+    def __init__(self, message, reply):
+        self.message = message
+        self.reply = reply
+
+    def to_json(self):
+        return {
+            "message": self.message,
+            "reply": self.reply
+        }
