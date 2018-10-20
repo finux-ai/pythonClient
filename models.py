@@ -55,12 +55,6 @@ class ApiResponse(object):
         )
 
 
-class AccessRefreshToken(object):
-    def __init__(self, data):
-        self.access_token = data.get("accessToken")
-        self.refresh_token = data.get("refreshToken")
-
-
 class ProfileRequest:
     def __init__(self, business_ID, company, first_name, last_name):
         self.business_ID = business_ID
@@ -84,8 +78,8 @@ class ChangePasswordRequest:
 
     def to_json(self):
         return {
-            "oldPassword": self.old_password
-            "newPassword": self.new_password
+            "oldPassword": self.old_password,
+            "newPassword": self.new_password,
             "repeatPassword": self.repeat_password
         }
 
@@ -99,3 +93,19 @@ class FeedbackRequest:
             "message": self.message,
             "reply": self.reply
         }
+
+
+class AccessRefreshToken(object):
+    def __init__(self, data):
+        self.access_token = data.get("accessToken")
+        self.refresh_token = data.get("refreshToken")
+
+
+class AccessToken(object):
+    def __init__(self, access_token):
+        self.access_token = access_token
+
+    @staticmethod
+    def from_json(json):
+        return AccessToken(json.get("accessToken"))
+
