@@ -4,7 +4,7 @@ from models import ApiResponse
 
 
 def auth_header(token):
-    return {"Authorization": "Bearer "+token}
+    return {"Authorization": "Bearer " + str(token)}
 
 
 def api_response(response):

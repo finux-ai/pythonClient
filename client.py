@@ -3,9 +3,10 @@ import json
 import requests
 
 from helpers import auth_header, api_response
-from models import RegisterRequest, AccessRefreshToken, LoginRequest, ProfileRequest, AccessToken
+from models import RegisterRequest, AccessRefreshToken, LoginRequest, ProfileRequest, AccessToken, \
+    ChangePasswordRequest, FeedbackRequest
 
-host = "https://app.dev.finux.ai/"
+host = "https://app.dev.finux.ai"
 def get_selected_account():
     path = "/api/user/connector/bank/account/{accountid}"
 
@@ -13,11 +14,14 @@ def get_selected_account():
 def handle_expired_access_token(request, tokens, path):
     access_token = access_for_refresh_token(tokens.refresh_token)
     headers = auth_header(access_token)
-    return requests.put(host + path, headers=headers, data=request.to_json())
+    data = None
+    if request is not None:
+        data = request.to_json()
+    return requests.put(host + path, headers=headers, data=data)
 
 
 def access_for_refresh_token(token):
-    path = "api/refreshtoken"
+    path = "/api/refreshtoken"
     request = {
         "refreshToken": token
     }
@@ -28,13 +32,13 @@ def access_for_refresh_token(token):
     return AccessToken.from_json(data)
 
 def health_check():
-    path = "api/ping"
+    path = "/api/ping"
     response = requests.get(host+path)
     return response
 
 
 def register(name, password, repeat_password):
-    path = "api/register"
+    path = "/api/register"
 
     request = RegisterRequest(name, password, repeat_password)
 
@@ -83,7 +87,7 @@ def profile(business_ID, company, first_name, last_name, tokens):
     return result.status
 
 
-def fetch_data():
+def fetch_data(tokens):
     path = "/api/user/profile"
     response = requests.get(host + path)
 
@@ -100,23 +104,57 @@ def fetch_data():
     return result.status
     
 
-def change_password(new_password, old_password, repeat_password):
+
+def change_password(new_password, repeat_password, old_password, tokens):
     path = "/api/user/changepw"
-    response = requests.put(host+path)
-    # something
-    pass
+
+    # create request
+    request = ChangePasswordRequest(
+        new_password=new_password,
+        old_password=old_password,
+        repeat_password=repeat_password
+    )
+
+    # first we try the access token
+    headers = auth_header(tokens.access_token)
+    response = requests.put(host + path, headers=headers, data=request.to_json())
+
+    # if access token is expired, we send the request token to fetch another access token
+    if response.status_code == 401:
+        response = handle_expired_access_token(request=request, tokens=tokens, path=path)
+
+    # map to response model
+    result = api_response(response)
+    return result.status
+
 
 def feedback(message, reply):
     path = "/api/user/feedback"
-    response = requests.post(host+path)
-    # something
-    pass
+
+    # create request
+    request = FeedbackRequest(
+
+    )
+
+    # first we try the access token
+    headers = auth_header(tokens.access_token)
+    response = requests.put(host + path, headers=headers, data=request.to_json())
+
+    # if access token is expired, we send the request token to fetch another access token
+    if response.status_code == 401:
+        response = handle_expired_access_token(request=request, tokens=tokens, path=path)
+
+    # map to response model
+    result = api_response(response)
+    return result.status
+
 
 def connect_bank_account(bank_code, extra_secret, save_secret, secret, username):
     path = "/api/user/connector/bank/account"
     response = requests.post(host+path)
     # something
     pass
+
 
 def get_all_bank_accounts():
     path = "/api/user/connector/bank/account"
@@ -192,6 +230,9 @@ def branches():
 
 if __name__ == "__main__":
     # test register function
-    register_data = register("bba1210@web.de", "Meinpasswort#12", "Meinpasswort#12")
+
+    tokens = login("bba3@web.de", "Meinpasswort#13")
+    status = change_password("Meinpasswort#15", "Meinpasswort#15", "Meinpasswort#14", tokens)
+    print(status)
 
 
