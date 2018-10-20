@@ -1,7 +1,7 @@
 import requests
 import json
 
-from models import RegisterRequest, RegisterLoginResponse
+from models import RegisterRequest, RegisterLoginResponse, ApiResponse, RegisterData
 
 host = "https://app.dev.finux.ai/"
 health_check_path = "api/ping"
@@ -19,12 +19,14 @@ def register(name, password, repeat_password):
 
     # send register credentials
     response = requests.post(host+register_path, data=body.to_json())
-    data = json.loads(response.text)
-    register_response = RegisterLoginResponse.from_json(data)
 
-    print(register_response)
-    # something
-    pass
+    # map to response model
+    data = json.loads(response.text)
+    api_response = ApiResponse.from_json(data)
+
+    # create register data
+    return RegisterData(api_response.data)
+
 
 def login(email, password):
     path = "/api/login"

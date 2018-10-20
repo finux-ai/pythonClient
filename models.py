@@ -22,6 +22,7 @@ class RegisterRequest(object):
             "repeatPassword": self.repeat_password
         }
 
+
 class LoginRequest:
     def __init__(self, email, password):
         self.email = email
@@ -32,6 +33,7 @@ class LoginRequest:
             "email": self.email,
             "password": self.password
         }
+
 
 class AlphaRegister:
     def __init__(self, email, password, repeat_password, alpha_key):
@@ -48,6 +50,7 @@ class AlphaRegister:
             "alphakey": self.alpha_key
         }
 
+
 class ApiResponse(object):
     def __init__(self, status, data, code):
         self.status = status
@@ -61,6 +64,13 @@ class ApiResponse(object):
             json.get("data"),
             json.get("code")
         )
+
+
+class RegisterData(object):
+    def __init__(self, data):
+        self.access_token = data.get("accessToken")
+        self.refresh_token = data.get("refreshToken")
+
 
 class ProfileRequest:
     def __init__(self, business_ID, company, first_name, last_name):
