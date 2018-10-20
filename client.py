@@ -1,28 +1,27 @@
 import requests
 
-from models import RegisterRequest
+from models import RegisterRequest, RegisterLoginResponse
 
 host = "https://app.dev.finux.ai/"
-register_path = "api/ping"
+health_check_path = "api/ping"
+register_path = "api/register"
 
 
 def health_check():
-    response = requests.get(host+register_path)
+    response = requests.get(host+health_check_path)
     return response
 
 
 def register(name, password, repeat_password):
-<<<<<<< Updated upstream
     # create request body
     body = RegisterRequest(name, password, repeat_password)
 
     # send register credentials
-    response = requests.post(host+register_path)
+    json = requests.post(host+register_path)
+    json.get("status")
+    response = RegisterLoginResponse(json)
 
-
-=======
-    path = "/api/register"
-    response = requests.post(host+path)
+    response.data.access_token
     # something
     pass
 
@@ -102,9 +101,10 @@ def branches():
     path = "api/ressources/branches"
     response = requests.get(host+path)
     # something
->>>>>>> Stashed changes
     pass
 
 
 if __name__ == "__main__":
-    print(health_check())
+    json = requests.post(host + register_path)
+
+    print(json)

@@ -16,7 +16,11 @@ class CustomError(object):
         self.code = code
 
     def from_json(self, json):
-        return CustomError(Status(json.get("status").get("message")))
+        return CustomError(
+            Status(json.get("status").get("message")),
+            Data(json.get("data").get("accessToken"), json.get("data").get("refreshToken")),
+            json.get("code")
+        )
 
 
 class RegisterRequest(object):
@@ -33,17 +37,16 @@ class RegisterRequest(object):
         }
 
 
-class RegisterResponse(object):
+class RegisterLoginResponse(object):
     def __init__(self, status_message, access_token, refresh_token, code):
         self.status = Status(status_message)
         self.data = Data(access_token, refresh_token)
         self.code = code
 
     def from_json(self, json):
-        return RegisterResponse(
+        return RegisterLoginResponse(
             json.get("status").get("message"),
             json.get("data").get("access_token"),
             json.get("data").get("refresh_token"),
             json.get("code")
         )
-
